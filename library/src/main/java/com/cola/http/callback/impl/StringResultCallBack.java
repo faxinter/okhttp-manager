@@ -7,10 +7,10 @@ import com.cola.http.callback.Callback;
  * @ Date 15/12/7 下午11:04
  * @ Description // Please Add Annotation
  */
-public class StringResultCallBack implements Callback {
+public class StringResultCallBack implements Callback<String> {
 
     @Override
-    public void onSuccess(Object response) {
+    public void onSuccess(String response) {
 
     }
 

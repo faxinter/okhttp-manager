@@ -4,10 +4,10 @@ import com.cola.http.callback.Callback;
 
 /**
  * @ Author SpringWater
- * @ Date 15/12/7 下午11:26
+ * @ Date 15/12/14 下午10:41
  * @ Description // Please Add Annotation
  */
-public abstract class ResultCallback<T> implements Callback<T> {
+public abstract class JsonResultCallbck<T> implements Callback<T> {
 
     @Override
     public void onSuccess(T response) {

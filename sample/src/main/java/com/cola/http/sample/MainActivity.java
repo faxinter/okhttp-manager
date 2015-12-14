@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.cola.http.OkHttp;
+import com.cola.http.callback.impl.JsonResultCallbck;
 import com.cola.http.callback.impl.StringResultCallBack;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Headers;
@@ -16,6 +17,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
         OkHttp.get().url("http://www.baidu.com").get(new StringResultCallBack(){
             @Override
             public void onSuccess(Object response) {
+                super.onSuccess(response);
+            }
+        });
+
+        OkHttp.get().url("http://www.baidu.com").get(new JsonResultCallbck<List<String>>() {
+
+            @Override
+            public void onSuccess(List<String> response) {
                 super.onSuccess(response);
             }
         });

@@ -21,14 +21,16 @@ import java.lang.reflect.Type;
 public class OkHttpApiImpl extends AbsApi {
 
     private OkHttpClient mOkHttpClient;
+    private OkHttp mOkHttp;
 
     public OkHttpApiImpl() {
         super();
         mOkHttpClient = new OkHttpClient();
+        mOkHttp = OkHttp.getInstance();
     }
 
     @Override
-    public void getRequest(final RequestBuilder requestBuilder) {
+    public void httpGetRequest(final RequestBuilder requestBuilder) {
         // 构建 OkHttp 所需要的 Request
         Request request = new Request.Builder()
                 .url(requestBuilder.getUrl())
@@ -46,23 +48,30 @@ public class OkHttpApiImpl extends AbsApi {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                // Json -> Object
-                if (null == callback || callback instanceof StringResultCallBack) {
+                if (response.code() >= 400 && response.code() <= 599) {
+                    try {
+                        mOkHttp.sendFailMessage(new RuntimeException(response.body().string()), callback);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
 
+                if (callback instanceof StringResultCallBack) {
+                    mOkHttp.sendMessage(callback, response.body().toString());
                 } else {
+                    // Json -> Object
                     Type genType = getClass().getGenericSuperclass();
                     Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-//                    entityClass = (Class) params[0];
-
                     Object object = mJsonConvert.execute(response.body().string(), (Class) params[0]);
-                    OkHttp.getInstance().sendMessage(callback, object);
+                    mOkHttp.sendMessage(callback, object);
                 }
             }
         });
     }
 
     @Override
-    public void postRequest(RequestBuilder requestBuilder) {
+    public void httpPostRequest(RequestBuilder requestBuilder) {
 
     }
 }

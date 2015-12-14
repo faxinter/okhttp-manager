@@ -9,11 +9,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 
-import com.cola.http.api.AbsApi;
-import com.cola.http.api.okhttp.OkHttpApiImpl;
 import com.cola.http.callback.Callback;
 import com.cola.http.json.JsonConvert;
-import com.cola.http.json.impl.FastJsonConvert;
 
 /**
  * @ Author SpringWater
@@ -46,7 +43,7 @@ public class OkHttp {
         return mInstance;
     }
 
-    public static RequestBuilder get(){
+    public static RequestBuilder get() {
         return new RequestBuilder(getInstance());
     }
 
@@ -72,6 +69,10 @@ public class OkHttp {
         return new RequestBuilder(this);
     }
 
+    public OkHttp jsonConvert() {
+        return getInstance();
+    }
+
     public void sendMessage(final Callback callback, final Object o) {
         if (null != callback) {
             mHandler.post(new Runnable() {
@@ -81,6 +82,10 @@ public class OkHttp {
                 }
             });
         }
+    }
+
+    public void sendFailMessage(final Exception e, final Callback callback) {
+
     }
 
     private void handleMessage(Message message) {

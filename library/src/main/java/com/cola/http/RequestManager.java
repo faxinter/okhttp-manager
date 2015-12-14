@@ -17,12 +17,12 @@ public class RequestManager {
 
     public void doGet(RequestBuilder requestBuilder) {
         verifyApi();
-        mApi.getRequest(requestBuilder);
+        mApi.httpGetRequest(requestBuilder);
     }
 
     public void doPost(RequestBuilder requestBuilder) {
         verifyApi();
-        mApi.postRequest(requestBuilder);
+        mApi.httpPostRequest(requestBuilder);
     }
 
     private void verifyApi() {

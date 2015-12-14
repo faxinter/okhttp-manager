@@ -16,9 +16,9 @@ public abstract class AbsApi {
     public AbsApi(){
     }
 
-    public abstract void getRequest(RequestBuilder requestBuilder);
+    public abstract void httpGetRequest(RequestBuilder requestBuilder);
 
-    public abstract void postRequest(RequestBuilder requestBuilder);
+    public abstract void httpPostRequest(RequestBuilder requestBuilder);
 
     public void setJsonConvert(JsonConvert convert) {
         mJsonConvert = convert;

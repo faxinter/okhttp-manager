@@ -7,7 +7,7 @@ import com.cola.http.callback.Callback;
  * @ Date 15/12/14 下午10:41
  * @ Description // Please Add Annotation
  */
-public abstract class JsonResultCallbck<T> implements Callback<T> {
+public abstract class JsonResultCallback<T> implements Callback<T> {
 
     @Override
     public void onSuccess(T response) {

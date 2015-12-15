@@ -5,6 +5,6 @@ package com.cola.http.callback.impl;
  * @ Date 15/12/7 下午11:08
  * @ Description // Please Add Annotation
  */
-public class DownloadResultCallBack {
+public class DownloadResultCallback {
 
 }

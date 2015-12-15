@@ -6,8 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.cola.http.OkHttp;
-import com.cola.http.callback.impl.JsonResultCallbck;
-import com.cola.http.callback.impl.StringResultCallBack;
+import com.cola.http.callback.impl.JsonResultCallback;
+import com.cola.http.callback.impl.StringResultCallback;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.new_get)
     public void onNewGetClick(){
 
-        OkHttp.get().url("http://www.baidu.com").get(new StringResultCallBack(){
+        OkHttp.get().url("http://www.baidu.com").get(new StringResultCallback() {
             @Override
-            public void onSuccess(Object response) {
+            public void onSuccess(String response) {
                 super.onSuccess(response);
             }
         });
 
-        OkHttp.get().url("http://www.baidu.com").get(new JsonResultCallbck<List<String>>() {
+        OkHttp.get().url("http://www.baidu.com").get(new JsonResultCallback<List<String>>() {
 
             @Override
             public void onSuccess(List<String> response) {

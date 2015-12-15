@@ -3,7 +3,7 @@ package com.cola.http.api.okhttp;
 import com.cola.http.OkHttp;
 import com.cola.http.RequestBuilder;
 import com.cola.http.api.AbsApi;
-import com.cola.http.callback.impl.StringResultCallBack;
+import com.cola.http.callback.impl.StringResultCallback;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -57,7 +57,7 @@ public class OkHttpApiImpl extends AbsApi {
                     return;
                 }
 
-                if (callback instanceof StringResultCallBack) {
+                if (callback instanceof StringResultCallback) {
                     mOkHttp.sendMessage(callback, response.body().toString());
                 } else {
                     // Json -> Object

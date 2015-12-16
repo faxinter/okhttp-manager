@@ -12,8 +12,8 @@ import java.util.Map;
  * @ Date 15/12/8 上午10:20
  * @ Description // Please Add Annotation
  */
-public abstract class RequestBuilder {
-
+public abstract class AbsRequestBuilder {
+    protected RequestManager mRequestManager;
     protected String mUrl;
     protected Object mTag;
     protected Map<String, String> mHeaders;
@@ -24,35 +24,32 @@ public abstract class RequestBuilder {
     private static int mTimeOut;
     private static String mUserAgent;
 
-    private RequestManager mRequestManager;
-
-    public RequestBuilder(RequestManager requestManager) {
+    public AbsRequestBuilder(RequestManager requestManager) {
         mRequestManager = requestManager;
     }
 
-    public RequestBuilder url(@NonNull String url) {
+    public AbsRequestBuilder url(@NonNull String url) {
         mUrl = url;
         return this;
     }
 
-    public RequestBuilder params(Map<String, String> params) {
+    public AbsRequestBuilder params(Map<String, String> params) {
         mParams = params;
         return this;
     }
 
-    public RequestBuilder headers(Map<String, String> params) {
+    public AbsRequestBuilder headers(Map<String, String> params) {
         mHeaders = params;
         return this;
     }
 
-    public RequestBuilder tag(Object tag) {
+    public AbsRequestBuilder tag(Object tag) {
         mTag = tag;
         return this;
     }
 
     public void execute(Callback callback) {
         mCallBack = callback;
-        mRequestManager.doRequest(this);
     }
 
     public Callback getCallBack() {

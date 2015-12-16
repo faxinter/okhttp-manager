@@ -1,7 +1,8 @@
 package com.cola.http.api.okhttp;
 
 import com.cola.http.api.AbsApi;
-import com.cola.http.builder.RequestBuilder;
+import com.cola.http.builder.AbsRequestBuilder;
+import com.cola.http.builder.GetAbsRequestBuilder;
 import com.cola.http.callback.impl.JsonListResultCallback;
 import com.cola.http.callback.impl.JsonResultCallback;
 import com.cola.http.callback.impl.StringResultCallback;
@@ -30,7 +31,7 @@ public class OkHttpApiImpl extends AbsApi {
     }
 
     @Override
-    public void httpGetRequest(final RequestBuilder requestBuilder) {
+    public void httpGetRequest(final GetAbsRequestBuilder requestBuilder) {
         // 构建 OkHttp 所需要的 Request
         Request request = new Request.Builder()
                 .url(requestBuilder.getUrl())
@@ -50,6 +51,7 @@ public class OkHttpApiImpl extends AbsApi {
             @Override
             public void onResponse(Response response) throws IOException {
                 String result = response.body().string();
+
                 if (response.isSuccessful()) {
                     if (callback instanceof StringResultCallback) {
                         mOkHttp.sendMessage(callback, result);
@@ -61,24 +63,19 @@ public class OkHttpApiImpl extends AbsApi {
                         Type genType = callback.getClass().getGenericSuperclass();
                         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
                         Object object = mJsonConvert.convert(result, (Class) params[0]);
+
                         mOkHttp.sendMessage(callback, object);
                     } else if (callback instanceof JsonListResultCallback) {
                         if (null == mJsonConvert) {
                             throw new IllegalStateException(" You must call OkHttp.jsonConvert() !");
                         }
-
                         // Json -> Object
-
                         Type genType = callback.getClass().getGenericSuperclass();
-
                         ParameterizedType parameterized = (ParameterizedType) genType;
-
                         Type[] params = parameterized.getActualTypeArguments();
-
                         ParameterizedType pType = (ParameterizedType) params[0];
 
                         Type[] subParams = pType.getActualTypeArguments();
-
                         Object object = mJsonConvert.convertList(result, (Class) subParams[0]);
 
                         mOkHttp.sendMessage(callback, object);
@@ -91,7 +88,7 @@ public class OkHttpApiImpl extends AbsApi {
     }
 
     @Override
-    public void httpPostRequest(RequestBuilder requestBuilder) {
+    public void httpPostRequest(AbsRequestBuilder requestBuilder) {
 
     }
 

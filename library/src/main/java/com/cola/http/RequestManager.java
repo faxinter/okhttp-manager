@@ -2,9 +2,8 @@ package com.cola.http;
 
 import com.cola.http.api.AbsApi;
 import com.cola.http.api.okhttp.OkHttpApiImpl;
-import com.cola.http.builder.GetRequestBuilder;
-import com.cola.http.builder.PostRequestBuilder;
-import com.cola.http.builder.RequestBuilder;
+import com.cola.http.builder.GetAbsRequestBuilder;
+import com.cola.http.builder.PostStringAbsRequestBuilder;
 
 /**
  * @ Author SpringWater
@@ -18,17 +17,14 @@ public class RequestManager {
         mApi = new OkHttpApiImpl();
     }
 
-    public void doRequest(RequestBuilder requestBuilder) {
+    public void doGetRequest(GetAbsRequestBuilder requestBuilder) {
         verifyApi();
+        mApi.httpGetRequest(requestBuilder);
+    }
 
-        if (requestBuilder instanceof GetRequestBuilder) {
-
-            mApi.httpGetRequest(requestBuilder);
-
-        } else if (requestBuilder instanceof PostRequestBuilder) {
-
-            mApi.httpPostRequest(requestBuilder);
-        }
+    public void doPostRequest(PostStringAbsRequestBuilder requestBuilder) {
+        verifyApi();
+        mApi.httpPostRequest(requestBuilder);
     }
 
     private void verifyApi() {
@@ -37,7 +33,4 @@ public class RequestManager {
         }
     }
 
-    public void doDownLoad() {
-
-    }
 }

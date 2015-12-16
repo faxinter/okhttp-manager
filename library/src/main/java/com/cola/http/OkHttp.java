@@ -8,9 +8,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 
-import com.cola.http.builder.GetRequestBuilder;
-import com.cola.http.builder.PostRequestBuilder;
-import com.cola.http.builder.RequestBuilder;
+import com.cola.http.builder.AbsRequestBuilder;
+import com.cola.http.builder.GetAbsRequestBuilder;
+import com.cola.http.builder.PostStringAbsRequestBuilder;
 import com.cola.http.builder.RequestType;
 import com.cola.http.callback.Callback;
 import com.cola.http.json.JsonConvert;
@@ -63,22 +63,22 @@ public class OkHttp {
         return null;
     }
 
-    public static RequestBuilder get() {
+    public static AbsRequestBuilder get() {
         getInstance();
         return getHttpRequest(RequestType.GET);
     }
 
-    public static RequestBuilder post() {
+    public static AbsRequestBuilder post() {
         getInstance();
         return getHttpRequest(RequestType.POST);
     }
 
-    private static RequestBuilder getHttpRequest(RequestType type) {
+    private static AbsRequestBuilder getHttpRequest(RequestType type) {
         switch (type) {
             case GET:
-                return new GetRequestBuilder(new RequestManager());
+                return new GetAbsRequestBuilder(new RequestManager());
             case POST:
-                return new PostRequestBuilder(new RequestManager());
+                return new PostStringAbsRequestBuilder(new RequestManager());
         }
         return null;
     }

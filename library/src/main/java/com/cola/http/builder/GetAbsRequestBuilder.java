@@ -1,6 +1,7 @@
 package com.cola.http.builder;
 
 import com.cola.http.RequestManager;
+import com.cola.http.callback.Callback;
 
 import java.util.Map;
 
@@ -9,14 +10,14 @@ import java.util.Map;
  * @ Date 15/12/15 下午7:39
  * @ Description // Please Add Annotation
  */
-public class GetRequestBuilder extends RequestBuilder {
+public class GetAbsRequestBuilder extends AbsRequestBuilder {
 
-    public GetRequestBuilder(RequestManager requestManager) {
+    public GetAbsRequestBuilder(RequestManager requestManager) {
         super(requestManager);
     }
 
     @Override
-    public RequestBuilder params(Map<String, String> params) {
+    public AbsRequestBuilder params(Map<String, String> params) {
         StringBuilder sb = new StringBuilder();
         sb.append(mUrl.contains("?") ? "&" : "?");
 
@@ -27,5 +28,11 @@ public class GetRequestBuilder extends RequestBuilder {
             mUrl += sb.toString();
         }
         return this;
+    }
+
+    @Override
+    public void execute(Callback callback) {
+        super.execute(callback);
+        mRequestManager.doGetRequest(this);
     }
 }

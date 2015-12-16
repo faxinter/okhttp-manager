@@ -10,9 +10,9 @@ import java.util.Map;
  * @ Date 15/12/15 下午7:39
  * @ Description // Please Add Annotation
  */
-public class GetAbsRequestBuilder extends AbsRequestBuilder {
+public class GetRequestBuilder extends AbsRequestBuilder {
 
-    public GetAbsRequestBuilder(RequestManager requestManager) {
+    public GetRequestBuilder(RequestManager requestManager) {
         super(requestManager);
     }
 

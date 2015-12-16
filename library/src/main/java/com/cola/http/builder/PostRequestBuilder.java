@@ -8,9 +8,9 @@ import com.cola.http.callback.Callback;
  * @ Date 15/12/15 下午7:39
  * @ Description // Please Add Annotation
  */
-public class PostStringAbsRequestBuilder extends AbsRequestBuilder {
+public class PostRequestBuilder extends AbsRequestBuilder {
 
-    public PostStringAbsRequestBuilder(RequestManager requestManager) {
+    public PostRequestBuilder(RequestManager requestManager) {
         super(requestManager);
     }
 

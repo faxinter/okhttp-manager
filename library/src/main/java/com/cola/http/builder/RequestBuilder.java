@@ -14,10 +14,11 @@ import java.util.Map;
  */
 public abstract class RequestBuilder {
 
-    private String mUrl;
-    private Map<String, String> mHeaders;
-    private Map<String, String> mParams;
-    private Callback mCallBack;
+    protected String mUrl;
+    protected Object mTag;
+    protected Map<String, String> mHeaders;
+    protected Map<String, String> mParams;
+    protected Callback mCallBack;
 
     // timeout 、ua 可以进行全局设置，不需要每次请求设置
     private static int mTimeOut;
@@ -41,6 +42,11 @@ public abstract class RequestBuilder {
 
     public RequestBuilder headers(Map<String, String> params) {
         mHeaders = params;
+        return this;
+    }
+
+    public RequestBuilder tag(Object tag) {
+        mTag = tag;
         return this;
     }
 

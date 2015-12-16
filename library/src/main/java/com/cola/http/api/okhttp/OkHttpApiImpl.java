@@ -6,6 +6,7 @@ import com.cola.http.callback.impl.JsonListResultCallback;
 import com.cola.http.callback.impl.JsonResultCallback;
 import com.cola.http.callback.impl.StringResultCallback;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -33,6 +34,7 @@ public class OkHttpApiImpl extends AbsApi {
         // 构建 OkHttp 所需要的 Request
         Request request = new Request.Builder()
                 .url(requestBuilder.getUrl())
+                .headers(Headers.of(requestBuilder.getHeaders()))
                 .build();
 
         final com.cola.http.callback.Callback callback = requestBuilder.getCallBack();
@@ -92,4 +94,5 @@ public class OkHttpApiImpl extends AbsApi {
     public void httpPostRequest(RequestBuilder requestBuilder) {
 
     }
+
 }

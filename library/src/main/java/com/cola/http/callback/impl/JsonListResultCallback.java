@@ -4,17 +4,13 @@ import com.cola.http.callback.Callback;
 
 /**
  * @ Author SpringWater
- * @ Date 15/12/7 下午11:08
+ * @ Date 15/12/14 下午10:41
  * @ Description // Please Add Annotation
  */
-public abstract class DownloadResultCallback implements Callback {
-
-    abstract void onStart();
-
-    abstract void onProgress(float progress);
+public abstract class JsonListResultCallback<T> implements Callback<T> {
 
     @Override
-    public void onSuccess(Object response) {
+    public void onSuccess(T response) {
 
     }
 

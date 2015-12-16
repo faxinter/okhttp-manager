@@ -6,14 +6,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.cola.http.OkHttp;
+import com.cola.http.callback.impl.JsonListResultCallback;
 import com.cola.http.callback.impl.JsonResultCallback;
 import com.cola.http.callback.impl.StringResultCallback;
-import com.squareup.okhttp.Callback;
+import com.cola.http.sample.json.FastJsonConvert;
+import com.cola.http.sample.models.User;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
@@ -41,28 +42,69 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //
+        OkHttp.getInstance().jsonConvert(new FastJsonConvert());
     }
 
-    @OnClick(R.id.new_get)
-    public void onNewGetClick(){
+    @OnClick(R.id.get_string)
+    public void onGetStringClick() {
+        // get String
+        OkHttp.get()
+                .url("http://publicobject.com/helloworld.txt")
+                .execute(new StringResultCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d(TAG, "get string: " + response);
+                    }
 
-        OkHttp.get().url("http://www.baidu.com").get(new StringResultCallback() {
-            @Override
-            public void onSuccess(String response) {
-                super.onSuccess(response);
-            }
-        });
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable) {
+                        Log.d(TAG, throwable.getMessage());
+                    }
+                });
 
-        OkHttp.get().url("http://www.baidu.com").get(new JsonResultCallback<List<String>>() {
+        // get json for object
 
-            @Override
-            public void onSuccess(List<String> response) {
-                super.onSuccess(response);
-            }
-        });
+        OkHttp.get()
+                .url("https://raw.githubusercontent.com/wfxphoebus/okhttp-manager/master/json/User.json")
+                .execute(new JsonResultCallback<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        Log.d(TAG, "get json: " + user.toString());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable) {
+                        Log.d(TAG, throwable.getMessage());
+                    }
+                });
+
+        // get json for list
+
+        OkHttp.get()
+                .url("https://raw.githubusercontent.com/wfxphoebus/okhttp-manager/master/json/Users.json")
+                .execute(new JsonListResultCallback<List<User>>() {
+                    @Override
+                    public void onSuccess(List<User> users) {
+                        for (User u : users) {
+                            Log.d(TAG, "get json list: " + u.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable) {
+                        Log.d(TAG, throwable.getMessage());
+                    }
+                });
     }
 
-    @OnClick(R.id.sync_get)
+    @OnClick(R.id.get_json)
+    public void onGetJsonClick() {
+
+    }
+
+    @OnClick(R.id.get_headers)
     public void onSyncGetClick() {
         // 同步需要在线程里
         new Thread(new Runnable() {
@@ -94,98 +136,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.async_get)
-    public void onAsyncGetClick() {
-        Request request = new Request.Builder()
-                .url("http://publicobject.com/helloworld.txt")
-                .build();
-
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-
-            @Override
-            public void onFailure(Request request, IOException e) {
-                Log.d(TAG, "e: " + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                Headers headers = response.headers();
-                for (int i = 0; i < headers.size(); i++) {
-                    Log.d(TAG, "header name: " + headers.name(i) + " value: " + headers.value(i));
-                }
-
-                Log.d(TAG, response.body().string());
-            }
-        });
-    }
-
-    @OnClick(R.id.get_headers)
-    public void onGetHdeadersClick() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Request request = new Request.Builder()
-                            .url("https://api.github.com/repos/square/okhttp/issues")
-                            .header("User-Agent", "OkHttp Headers.java")
-                            .addHeader("Accept", "application/json; q=0.5")
-                            .addHeader("Accept", "application/vnd.github.v3+json")
-                            .build();
-
-                    Response response = mOkHttpClient.newCall(request).execute();
-                    if (!response.isSuccessful())
-                        throw new IOException("Unexpected code " + response);
-
-                    Headers headers = response.headers();
-                    for (int i = 0; i < headers.size(); i++) {
-                        Log.d(TAG, "header name: " + headers.name(i) + " value: " + headers.value(i));
-                    }
-
-                    System.out.println("Server: " + response.header("Server"));
-                    System.out.println("Date: " + response.header("Date"));
-
-                    System.out.println("Vary: " + response.headers("Vary"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    @OnClick(R.id.post_string)
-    public void onPostStringClick() {
-        try {
-            String postBody = ""
-                    + "Releases\n"
-                    + "--------\n"
-                    + "\n"
-                    + " * _1.0_ May 6, 2013\n"
-                    + " * _1.1_ June 15, 2013\n"
-                    + " * _1.2_ August 11, 2013\n";
-
-            Request request = new Request.Builder()
-                    .url("https://api.github.com/markdown/raw")
-                    .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
-                    .build();
-
-            Response response = mOkHttpClient.newCall(request).execute();
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-            System.out.println(response.body().string());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-//    @OnClick(R.id.okhttp_post)
-//    public void onOKHttpPostClick() {
-//        try{
-//
-//        }catch (IOException e){
-//
-//        }
-//    }
 }

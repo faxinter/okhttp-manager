@@ -1,6 +1,7 @@
 package com.cola.http.api;
 
-import com.cola.http.RequestBuilder;
+import com.cola.http.OkHttp;
+import com.cola.http.builder.RequestBuilder;
 import com.cola.http.json.JsonConvert;
 
 /**
@@ -10,10 +11,12 @@ import com.cola.http.json.JsonConvert;
  */
 public abstract class AbsApi {
 
-//    protected RequestBuilder mRequestBuilder;
+    protected OkHttp mOkHttp;
     protected JsonConvert mJsonConvert;
 
-    public AbsApi(){
+    public AbsApi() {
+        mOkHttp = OkHttp.getInstance();
+        mJsonConvert = mOkHttp.getJsonConvert();
     }
 
     public abstract void httpGetRequest(RequestBuilder requestBuilder);

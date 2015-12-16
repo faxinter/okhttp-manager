@@ -2,6 +2,9 @@ package com.cola.http;
 
 import com.cola.http.api.AbsApi;
 import com.cola.http.api.okhttp.OkHttpApiImpl;
+import com.cola.http.builder.GetRequestBuilder;
+import com.cola.http.builder.PostRequestBuilder;
+import com.cola.http.builder.RequestBuilder;
 
 /**
  * @ Author SpringWater
@@ -15,20 +18,23 @@ public class RequestManager {
         mApi = new OkHttpApiImpl();
     }
 
-    public void doGet(RequestBuilder requestBuilder) {
+    public void doRequest(RequestBuilder requestBuilder) {
         verifyApi();
-        mApi.httpGetRequest(requestBuilder);
-    }
 
-    public void doPost(RequestBuilder requestBuilder) {
-        verifyApi();
-        mApi.httpPostRequest(requestBuilder);
+        if (requestBuilder instanceof GetRequestBuilder) {
+
+            mApi.httpGetRequest(requestBuilder);
+
+        } else if (requestBuilder instanceof PostRequestBuilder) {
+
+            mApi.httpPostRequest(requestBuilder);
+        }
     }
 
     private void verifyApi() {
-//        if (null == mApi) {
-//            throw new IllegalArgumentException("you must invoke setOKHttpEnabled()");
-//        }
+        if (null == mApi) {
+            throw new IllegalArgumentException("you must invoke setOKHttpEnabled()");
+        }
     }
 
     public void doDownLoad() {

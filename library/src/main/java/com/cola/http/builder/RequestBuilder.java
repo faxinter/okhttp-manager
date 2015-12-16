@@ -1,7 +1,8 @@
-package com.cola.http;
+package com.cola.http.builder;
 
 import android.support.annotation.NonNull;
 
+import com.cola.http.RequestManager;
 import com.cola.http.callback.Callback;
 
 import java.util.Map;
@@ -11,19 +12,21 @@ import java.util.Map;
  * @ Date 15/12/8 上午10:20
  * @ Description // Please Add Annotation
  */
-public class RequestBuilder {
-
-    private OkHttp mOkHttp;
+public abstract class RequestBuilder {
 
     private String mUrl;
     private Map<String, String> mHeaders;
     private Map<String, String> mParams;
     private Callback mCallBack;
 
-    private RequestManager mRequestManager = new RequestManager();
+    // timeout 、ua 可以进行全局设置，不需要每次请求设置
+    private static int mTimeOut;
+    private static String mUserAgent;
 
-    public RequestBuilder(OkHttp okHttp) {
-        mOkHttp = okHttp;
+    private RequestManager mRequestManager;
+
+    public RequestBuilder(RequestManager requestManager) {
+        mRequestManager = requestManager;
     }
 
     public RequestBuilder url(@NonNull String url) {
@@ -41,13 +44,9 @@ public class RequestBuilder {
         return this;
     }
 
-    public void get(Callback callback) {
+    public void execute(Callback callback) {
         mCallBack = callback;
-        mRequestManager.doGet(this);
-    }
-
-    public void post(Callback callback) {
-        mRequestManager.doPost(this);
+        mRequestManager.doRequest(this);
     }
 
     public Callback getCallBack() {

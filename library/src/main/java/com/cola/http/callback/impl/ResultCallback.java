@@ -9,13 +9,5 @@ import com.cola.http.callback.Callback;
  */
 public abstract class ResultCallback<T> implements Callback<T> {
 
-    @Override
-    public void onSuccess(T response) {
 
-    }
-
-    @Override
-    public void onFailure(int statusCode, Throwable throwable) {
-
-    }
 }

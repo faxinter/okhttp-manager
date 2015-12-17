@@ -37,14 +37,14 @@ public class OkHttpApiImpl extends AbsApi {
     @Override
     public void httpGetRequest(final GetRequestBuilder requestBuilder) {
         // 构建 OkHttp 所需要的 Request
-        Request request = new Request.Builder()
-                .url(requestBuilder.getUrl())
-                .headers(Headers.of(requestBuilder.getHeaders()))
-                .build();
+        Request.Builder builder = new Request.Builder()
+                .url(requestBuilder.getUrl());
+        if (null != requestBuilder.getHeaders())
+            builder.headers(Headers.of(requestBuilder.getHeaders()));
 
         final com.cola.http.callback.Callback callback = requestBuilder.getCallBack();
         // 网络请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
+        mOkHttpClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 if (null != callback) {

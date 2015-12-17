@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.cola.http.RequestManager;
 import com.cola.http.callback.Callback;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -33,8 +34,20 @@ public abstract class AbsRequestBuilder {
         return this;
     }
 
+    public AbsRequestBuilder param(String key, String value) {
+        if (null == mParams) mParams = new Hashtable<>();
+        if (null != key && !key.isEmpty()) mParams.put(key, value);
+        return this;
+    }
+
     public AbsRequestBuilder params(Map<String, String> params) {
         mParams = params;
+        return this;
+    }
+
+    public AbsRequestBuilder header(String key, String value) {
+        if (null == mHeaders) mHeaders = new Hashtable<>();
+        if (null != key && !key.isEmpty()) mHeaders.put(key, value);
         return this;
     }
 

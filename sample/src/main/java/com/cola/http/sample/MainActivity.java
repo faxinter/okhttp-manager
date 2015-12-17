@@ -11,13 +11,9 @@ import com.cola.http.callback.impl.JsonResultCallback;
 import com.cola.http.callback.impl.StringResultCallback;
 import com.cola.http.sample.json.FastJsonConvert;
 import com.cola.http.sample.models.User;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -99,41 +95,23 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick(R.id.get_json)
-    public void onGetJsonClick() {
-
-    }
-
-    @OnClick(R.id.get_headers)
-    public void onSyncGetClick() {
-        // 同步需要在线程里
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                final Request request = new Request.Builder()
-                        .url("http://publicobject.com/helloworld.txt")
-                        .build();
-                Response response = null;
-                try {
-                    response = mOkHttpClient.newCall(request).execute();
-                    if (!response.isSuccessful()) {
-                        throw new IOException("Unexpected code " + response);
+    @OnClick(R.id.post)
+    public void onPostClick() {
+        OkHttp.post()
+                .url("https://en.wikipedia.org/w/index.php")
+                .param("search", "Jurassic Park")
+                .execute(new StringResultCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d(TAG, "post string: " + response);
                     }
 
-                    Headers headers = response.headers();
-                    for (int i = 0; i < headers.size(); i++) {
-                        Log.d(TAG, "header name: " + headers.name(i) + " value: " + headers.value(i));
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable) {
+                        Log.d(TAG, throwable.getMessage());
                     }
-
-                    Log.d(TAG, response.body().string());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
+                });
     }
+
 
 }
